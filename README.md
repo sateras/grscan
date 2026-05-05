@@ -1,78 +1,78 @@
 # grscan
 
-Мини-утилита для поиска Git-репозиториев по remote (имени или URL) внутри директории.
+CLI tool for finding Git repositories by remote (name or URL) within a directory.
 
-## Возможности
+## Features
 
-* Рекурсивно обходит папки
-* Находит все `.git` репозитории
-* Проверяет `git remote -v`
-* Ищет по:
+* Recursively scans directories
+* Detects all `.git` repositories
+* Runs `git remote -v` for each repo
+* Searches by:
 
-  * имени remote (`person-companies`)
-  * или части URL (`gitlab.khc.kz`)
+  * remote name (e.g. `person-companies`)
+  * URL substring (e.g. `gitlab.khc.kz`)
 
 ---
 
-## Установка
+## Installation
 
-```bash
-go mod init git-find
-go build -o git-find
+```bash id="inst01"
+go mod init grscan
+go build -o grscan
 ```
 
 ---
 
-## Использование
+## Usage
 
-### Базовый запуск
+### Basic usage
 
-```bash
-./git-find -q person-companies
+```bash id="use01"
+./grscan -q person-companies
 ```
 
-Ищет в текущей директории (`.`)
+Scans the current directory (`.`)
 
 ---
 
-### Указать путь
+### Specify a path
 
-```bash
-./git-find -path ~/projects -q person-companies
-```
-
----
-
-## Аргументы
-
-| Флаг    | Описание                       | По умолчанию       |
-| ------- | ------------------------------ | ------------------ |
-| `-path` | путь для поиска                | `.`                |
-| `-q`    | строка поиска (remote или URL) | `person-companies` |
-
----
-
-## Примеры
-
-### Найти по имени remote
-
-```bash
-./git-find -q person-companies
+```bash id="use02"
+./grscan -path ~/projects -q person-companies
 ```
 
 ---
 
-### Найти по URL
+## Flags
 
-```bash
-./git-find -q gitlab.khc.kz
+| Flag    | Description                        | Default            |
+| ------- | ---------------------------------- | ------------------ |
+| `-path` | root directory to scan             | `.`                |
+| `-q`    | search string (remote name or URL) | `person-companies` |
+
+---
+
+## Examples
+
+### Find by remote name
+
+```bash id="ex01"
+./grscan -q person-companies
 ```
 
 ---
 
-## Пример вывода
+### Find by URL
 
-```bash
+```bash id="ex02"
+./grscan -q gitlab.khc.kz
+```
+
+---
+
+## Example Output
+
+```bash id="out01"
 FOUND: /Users/user/projects/repo1
 origin  git@gitlab.khc.kz:repo.git (fetch)
 origin  git@gitlab.khc.kz:repo.git (push)
@@ -81,35 +81,35 @@ origin  git@gitlab.khc.kz:repo.git (push)
 
 ---
 
-## Как работает
+## How it works
 
-1. Обходит директорию (`filepath.WalkDir`)
-2. Ищет папки `.git`
-3. Для каждой:
+1. Walks the directory tree (`filepath.WalkDir`)
+2. Finds `.git` directories
+3. For each repo:
 
-   * выполняет `git remote -v`
-   * проверяет совпадение с `-q`
-4. Выводит совпадения
+   * runs `git remote -v`
+   * checks for matches with `-q`
+4. Prints matching repositories
 
 ---
 
-## Требования
+## Requirements
 
 * Go 1.18+
-* установленный `git` в системе
+* `git` installed and available in PATH
 
 ---
 
-## Идеи для улучшения
+## Ideas for improvement
 
-* Параллельный обход (ускорение)
-* JSON вывод
-* фильтр по branch
-* вывод только путей (`--quiet`)
-* чтение `.git/config` вместо вызова git
+* Parallel scanning (faster)
+* JSON output
+* Branch filtering
+* Quiet mode (`--only-paths`)
+* Read `.git/config` instead of calling git
 
 ---
 
-## Лицензия
+## License
 
 MIT
